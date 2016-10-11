@@ -16,7 +16,8 @@ package com.google.appengine.tools.mapreduce.servlets;
 
 import static java.util.concurrent.Executors.callable;
 
-import com.google.appengine.api.modules.ModulesServiceFactory;
+/* Modules are not currently supported in AppScale 3.1.0 */
+//import com.google.appengine.api.modules.ModulesServiceFactory;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskAlreadyExistsException;
@@ -86,6 +87,8 @@ public class ShufflerServlet extends HttpServlet {
   private static final String MIME_TYPE = "application/octet-stream";
 
   private static final int MAX_VALUES_COUNT = 10000;
+
+  private static final String DEFAULT_MODULE_VERSION_HOSTNAME = "hostname";
 
   private static final ExceptionHandler EXCEPTION_HANDLER = new ExceptionHandler.Builder()
       .retryOn(Exception.class).abortOn(IllegalArgumentException.class,
@@ -224,8 +227,10 @@ public class ShufflerServlet extends HttpServlet {
     RetryHelper.runWithRetries(callable(new Runnable() {
       @Override
       public void run() {
-        String hostname = ModulesServiceFactory.getModulesService().getVersionHostname(
-            shufflerParams.getCallbackModule(), shufflerParams.getCallbackVersion());
+        /* Modules are not currently supported in AppScale 3.1.0 */
+        /*String hostname = ModulesServiceFactory.getModulesService().getVersionHostname(
+            shufflerParams.getCallbackModule(), shufflerParams.getCallbackVersion());*/
+        String hostname = DEFAULT_MODULE_VERSION_HOSTNAME;
         Queue queue = QueueFactory.getQueue(shufflerParams.getCallbackQueue());
         String separater = shufflerParams.getCallbackPath().contains("?") ? "&" : "?";
         try {

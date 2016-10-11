@@ -9,9 +9,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import com.google.appengine.api.backends.BackendService;
 import com.google.appengine.api.backends.BackendServiceFactory;
 import com.google.appengine.api.datastore.Key;
-import com.google.appengine.api.modules.ModulesException;
+
+/* Modules are not currently supported in AppScale 3.1.0 */
+/*import com.google.appengine.api.modules.ModulesException;
 import com.google.appengine.api.modules.ModulesService;
-import com.google.appengine.api.modules.ModulesServiceFactory;
+import com.google.appengine.api.modules.ModulesServiceFactory;*/
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TransientFailureException;
@@ -37,7 +39,7 @@ public class MapSettings implements Serializable {
 
   private static final long serialVersionUID = 51425056338041064L;
   private static final ExceptionHandler MODULES_EXCEPTION_HANDLER =
-      new ExceptionHandler.Builder().retryOn(ModulesException.class).build();
+      new ExceptionHandler.Builder().retryOn(Exception.class).build();
   private static final ExceptionHandler QUEUE_EXCEPTION_HANDLER =
       new ExceptionHandler.Builder().retryOn(TransientFailureException.class).build();
   private static final RetryParams QUEUE_RETRY_PARAMS = new RetryParams.Builder()
@@ -47,6 +49,8 @@ public class MapSettings implements Serializable {
   public static final String DEFAULT_BASE_URL = "/mapreduce/";
   public static final String CONTROLLER_PATH = "controllerCallback";
   public static final String WORKER_PATH = "workerCallback";
+  public static final String DEFAULT_MODULE_NAME = "module";
+  public static final String DEFAULT_MODULE_VERSION = "version0";
   public static final int DEFAULT_MILLIS_PER_SLICE = 180_000;
   public static final double DEFAULT_SLICE_TIMEOUT_RATIO = 1.1;
   public static final int DEFAULT_SHARD_RETRIES = 4;
@@ -272,12 +276,16 @@ public class MapSettings implements Serializable {
         if (currentBackend != null) {
           backend = currentBackend;
         } else {
-          ModulesService modulesService = ModulesServiceFactory.getModulesService();
+          /* Modules are not currently supported in AppScale 3.1.0 */
+          /*ModulesService modulesService = ModulesServiceFactory.getModulesService();
           module = modulesService.getCurrentModule();
-          version = modulesService.getCurrentVersion();
+          version = modulesService.getCurrentVersion();*/
+          module = DEFAULT_MODULE_NAME;
+          version = DEFAULT_MODULE_VERSION;
         }
       } else {
-        final ModulesService modulesService = ModulesServiceFactory.getModulesService();
+        /* Modules are not currently supported in AppScale 3.1.0 */
+        /*final ModulesService modulesService = ModulesServiceFactory.getModulesService();
         if (module.equals(modulesService.getCurrentModule())) {
           version = modulesService.getCurrentVersion();
         } else {
@@ -288,6 +296,11 @@ public class MapSettings implements Serializable {
               return modulesService.getDefaultVersion(requestedModule);
             }
           },  QUEUE_RETRY_PARAMS, MODULES_EXCEPTION_HANDLER);
+        }*/
+        if (module.equals(DEFAULT_MODULE_NAME)) {
+          version = DEFAULT_MODULE_VERSION;
+        } else {
+          version = DEFAULT_MODULE_VERSION;
         }
       }
     }

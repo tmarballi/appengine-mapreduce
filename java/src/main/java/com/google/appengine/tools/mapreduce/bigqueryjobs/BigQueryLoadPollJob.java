@@ -68,7 +68,9 @@ final class BigQueryLoadPollJob extends Job1<Void, BigQueryLoadJobReference> {
         HttpServletRequest request = DeferredTaskContext.getCurrentRequest();
         int attempts = request.getIntHeader("X-AppEngine-TaskExecutionCount");
         log.info("Request to poll the job status #" + attempts);
-        DeferredTaskContext.markForRetry();
+        /* SDK 1.8.4 does not support the markForRetry() method */
+        //DeferredTaskContext.markForRetry();
+        DeferredTaskContext.setDoNotRetry(false);
       }
 
       private void submitPromisedValue(String status) {

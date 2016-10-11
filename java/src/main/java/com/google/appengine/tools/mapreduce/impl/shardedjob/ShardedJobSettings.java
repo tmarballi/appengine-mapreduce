@@ -5,7 +5,8 @@ package com.google.appengine.tools.mapreduce.impl.shardedjob;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import com.google.appengine.api.backends.BackendServiceFactory;
-import com.google.appengine.api.modules.ModulesServiceFactory;
+/* Modules are not currently supported in AppScale 3.1.0 */
+//import com.google.appengine.api.modules.ModulesServiceFactory;
 
 import static com.google.appengine.tools.mapreduce.MapSettings.DEFAULT_BASE_URL;
 import static com.google.appengine.tools.mapreduce.MapSettings.WORKER_PATH;
@@ -26,6 +27,8 @@ public final class ShardedJobSettings implements Serializable {
   private static final long serialVersionUID = 286995366653078363L;
 
   public static final int DEFAULT_SLICE_TIMEOUT_MILLIS = 11 * 60000;
+
+  public static final String DEFAULT_MODULE_VERSION_HOSTNAME = "hostname";
 
   /*Nullable*/ private final String backend;
   /*Nullable*/ private final String module;
@@ -145,7 +148,9 @@ public final class ShardedJobSettings implements Serializable {
     if (backend != null) {
       return BackendServiceFactory.getBackendService().getBackendAddress(backend);
     }
-    return ModulesServiceFactory.getModulesService().getVersionHostname(module, version);
+    //* Modules are not currently supported in AppScale 3.1.0 */
+    //return ModulesServiceFactory.getModulesService().getVersionHostname(module, version);
+    return DEFAULT_MODULE_VERSION_HOSTNAME;
   }
 
   public String getTaskQueueTarget() {

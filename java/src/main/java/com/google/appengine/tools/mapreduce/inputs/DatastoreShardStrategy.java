@@ -11,6 +11,7 @@ import static com.google.appengine.api.datastore.Query.SortDirection.ASCENDING;
 import static com.google.appengine.api.datastore.Query.SortDirection.DESCENDING;
 import static com.google.appengine.tools.mapreduce.inputs.BaseDatastoreInput.createQuery;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.DatastoreFailureException;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreTimeoutException;
@@ -215,19 +216,25 @@ public class DatastoreShardStrategy {
     String property = range.getPropertyName();
     List<Range> ranges;
     if (property == null) {
-      ranges = getScatterSplitPoints(query.getNamespace(), query.getKind(), numSegments);
+      /* SDK 1.8.4 does not support the getNamespace() method */
+      //ranges = getScatterSplitPoints(query.getNamespace(), query.getKind(), numSegments);
+      ranges = getScatterSplitPoints(NamespaceManager.get(), query.getKind(), numSegments);
     } else {
       if (range.getUpperBound() == null) {
-        FilterPredicate predicate = findFirstPredicate(query.getNamespace(), query.getKind(),
-            equalityFilters, property, DESCENDING);
+        /*FilterPredicate predicate = findFirstPredicate(query.getNamespace(), query.getKind(),
+            equalityFilters, property, DESCENDING);*/
+        FilterPredicate predicate = findFirstPredicate(NamespaceManager.get(), query.getKind(),
+                equalityFilters, property, DESCENDING);
         if (predicate == null) {
           return ImmutableList.of(query);
         }
         range.setUpperBound(predicate);
       }
       if (range.getLowerBound() == null) {
-        FilterPredicate predicate = findFirstPredicate(query.getNamespace(), query.getKind(),
-            equalityFilters, property, ASCENDING);
+        /*FilterPredicate predicate = findFirstPredicate(query.getNamespace(), query.getKind(),
+            equalityFilters, property, ASCENDING);*/
+        FilterPredicate predicate = findFirstPredicate(NamespaceManager.get(), query.getKind(),
+                equalityFilters, property, ASCENDING);
         if (predicate == null) {
           return ImmutableList.of(query);
         }
