@@ -114,6 +114,16 @@
       </resource>
     </resources>
   </build>
+  <repositories>
+    <repository>
+      <id>lib</id>
+      <url>file://${project.basedir}/lib</url>
+    </repository>
+    <repository>
+      <id>lib1</id>
+      <url>file://${project.basedir}/lib1</url>
+    </repository>
+  </repositories>
   <dependencies>
     <!-- Compile/Runtime Dependencies -->
     <dependency>
@@ -134,9 +144,9 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>com.google.appengine.tools</groupId>
-      <artifactId>appengine-gcs-client</artifactId>
-      <version>[0.4.3,1.0)</version>
+      <groupId>appscale-gcs-sdk</groupId>
+      <artifactId>appscale-gcs-client</artifactId>
+      <version>0.6</version>
       <exclusions>
         <exclusion>
           <groupId>com.google.guava</groupId>
@@ -145,9 +155,9 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>com.google.appengine.tools</groupId>
-      <artifactId>appengine-pipeline</artifactId>
-      <version>[0.2.11,1.0)</version>
+      <groupId>appscale-pipeline-sdk</groupId>
+      <artifactId>appscale-pipeline</artifactId>
+      <version>0.2.13</version>
       <exclusions>
         <exclusion>
           <groupId>com.google.guava</groupId>
