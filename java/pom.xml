@@ -116,12 +116,12 @@
   </build>
   <repositories>
     <repository>
-      <id>lib</id>
-      <url>file://${project.basedir}/lib</url>
+      <id>gcs-lib</id>
+      <url>file://${project.basedir}/gcs-lib</url>
     </repository>
     <repository>
-      <id>lib1</id>
-      <url>file://${project.basedir}/lib1</url>
+      <id>pipeline-lib</id>
+      <url>file://${project.basedir}/pipeline-lib</url>
     </repository>
   </repositories>
   <dependencies>
